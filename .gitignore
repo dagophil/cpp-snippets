@@ -1,0 +1,13 @@
+.vscode/
+build/
+build_vs2010/
+build_vs2015/
+CMakeFiles/
+*.dll
+*.exe
+*.lib
+*.a
+*.gcda
+*.gcno
+*.so
+*.o

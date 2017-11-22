@@ -1,5 +1,6 @@
 .vscode/
 build/
+build_gcc/
 build_vs2010/
 build_vs2015/
 CMakeFiles/
@@ -11,3 +12,5 @@ CMakeFiles/
 *.gcno
 *.so
 *.o
+*.sublime-project
+*.sublime-workspace

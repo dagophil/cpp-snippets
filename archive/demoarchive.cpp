@@ -2,12 +2,10 @@
 #include <iostream>
 
 
-std::ostream& operator<<(std::ostream& fr_stream, DemoArchive const& fcr_archive)
+std::string DemoArchive::data() const
 {
-	fr_stream << "< DemoArchive >";
-	return fr_stream;
+	return "< DemoArchive >";
 }
-
 
 void serialize(DemoArchive& fr_archive, int const fc_value)
 {
@@ -19,6 +17,10 @@ void serialize(DemoArchive& fr_archive, std::string const& fcr_value)
 	std::cout << "STORE VALUE (std::string) " << fcr_value << std::endl;
 }
 
+void serialize(DemoArchive& fr_archive, double const fc_value)
+{
+	std::cout << "STORE VALUE (double) " << fc_value << std::endl;
+}
 
 void deserialize(DemoArchive& fr_archive, int& fr_value)
 {
@@ -28,4 +30,9 @@ void deserialize(DemoArchive& fr_archive, int& fr_value)
 void deserialize(DemoArchive& fr_archive, std::string& fr_value)
 {
 	std::cout << "LOAD VALUE (std::string)" << std::endl;
+}
+
+void deserialize(DemoArchive& fr_archive, double& fr_value)
+{
+	std::cout << "LOAD VALUE (double)" << std::endl;
 }

@@ -18,6 +18,8 @@ public:
 	template <typename T>
 	void serialize(std::string const& fcr_name, T const& fcr_value);
 
+	std::string const& data() const;
+
 private:
 	std::string getCurrentIndentation() const;
 	void beginSerializeGroup(std::string const& fcr_name);
@@ -29,14 +31,14 @@ private:
 	std::string m_xmlString {Xml::sc_xmlVersionTag};
 	bool m_justWrittenValue {false};
 
-	friend std::ostream& operator<<(std::ostream& fr_stream, XmlOArchive const& fcr_archive);
 	friend void serialize(XmlOArchive& fr_archive, int const fc_value);
 	friend void serialize(XmlOArchive& fr_archive, std::string const& fcr_value);
+	friend void serialize(XmlOArchive& fr_archive, double const fc_value);
 };
 
-std::ostream& operator<<(std::ostream& fr_stream, XmlOArchive const& fcr_archive);
 void serialize(XmlOArchive& fr_archive, int const fc_value);
 void serialize(XmlOArchive& fr_archive, std::string const& fcr_value);
+void serialize(XmlOArchive& fr_archive, double const fc_value);
 
 
 class XmlIArchive
@@ -59,10 +61,12 @@ private:
 
 	friend void deserialize(XmlIArchive& fr_archive, int& fr_value);
 	friend void deserialize(XmlIArchive& fr_archive, std::string& fr_value);
+	friend void deserialize(XmlIArchive& fr_archive, double& fr_value);
 };
 
 void deserialize(XmlIArchive& fr_archive, int& fr_value);
 void deserialize(XmlIArchive& fr_archive, std::string& fr_value);
+void deserialize(XmlIArchive& fr_archive, double& fr_value);
 
 
 class XmlParseError : public std::runtime_error

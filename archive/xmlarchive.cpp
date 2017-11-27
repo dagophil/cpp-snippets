@@ -1,6 +1,11 @@
 #include "xmlarchive.h"
-#include <iostream>
+#include <ostream>
 
+
+std::string const& XmlOArchive::data() const
+{
+	return m_xmlString;
+}
 
 std::string XmlOArchive::getCurrentIndentation() const
 {
@@ -38,12 +43,6 @@ void XmlOArchive::endSerializeValue()
 	m_justWrittenValue = true;
 }
 
-std::ostream& operator<<(std::ostream& fr_stream, XmlOArchive const& fcr_archive)
-{
-	fr_stream << fcr_archive.m_xmlString;
-	return fr_stream;
-}
-
 void serialize(XmlOArchive& fr_archive, int const fc_value)
 {
 	fr_archive.beginSerializeValue();
@@ -55,6 +54,13 @@ void serialize(XmlOArchive& fr_archive, std::string const& fcr_value)
 {
 	fr_archive.beginSerializeValue();
 	fr_archive.m_xmlString += fcr_value;
+	fr_archive.endSerializeValue();
+}
+
+void serialize(XmlOArchive& fr_archive, double const fc_value)
+{
+	fr_archive.beginSerializeValue();
+	fr_archive.m_xmlString += std::to_string(fc_value);
 	fr_archive.endSerializeValue();
 }
 
@@ -128,5 +134,12 @@ void deserialize(XmlIArchive& fr_archive, std::string& fr_value)
 {
 	std::string const lc_valueString = fr_archive.beginDeserializeValue();
 	fr_value = lc_valueString;
+	fr_archive.endDeserializeValue(lc_valueString);
+}
+
+void deserialize(XmlIArchive& fr_archive, double& fr_value)
+{
+	std::string const lc_valueString = fr_archive.beginDeserializeValue();
+	fr_value = std::stod(lc_valueString);
 	fr_archive.endDeserializeValue(lc_valueString);
 }

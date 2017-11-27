@@ -12,6 +12,9 @@ add_executable(main
 	xmlarchive.h
 	xmlarchive.cpp
 	xmlarchive.inl
+	binaryarchive.h
+	binaryarchive.cpp
+	binaryarchive.inl
 	family.h
 	family.cpp
 	person.h

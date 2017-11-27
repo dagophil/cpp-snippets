@@ -1,23 +1,27 @@
+#include "binaryarchive.h"
 #include "demoarchive.h"
-#include "xmlarchive.h"
 #include "family.h"
 #include "person.h"
+#include "xmlarchive.h"
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 
+#include "binaryarchive.inl"
 #include "demoarchive.inl"
 #include "xmlarchive.inl"
 
 
-namespace
+std::ostream& operator<<(std::ostream& fr_stream, std::vector<BYTE> const& fcr_vector)
 {
-	template <typename T>
-	std::string toString(T const& fcr_value)
+	fr_stream << fcr_vector.size() << " bytes: ";
+	fr_stream << std::hex;
+	for (BYTE const x : fcr_vector)
 	{
-		std::stringstream l_ss;
-		l_ss << fcr_value;
-		return l_ss.str();
+		fr_stream << std::setfill('0') << std::setw(2) << (int)x << " ";
 	}
+	fr_stream << std::dec;
+	return fr_stream;
 }
 
 
@@ -31,11 +35,11 @@ void test_archive()
 		std::cout << lc_oInt << "\n";
 		OArchive l_oArchive;
 		l_oArchive.serialize("my_int", lc_oInt);
-		std::string const lc_resultString = toString(l_oArchive);
+		auto const lc_result = l_oArchive.data();
 		std::cout << "Result:\n";
-		std::cout << lc_resultString << "\n";
+		std::cout << lc_result << "\n";
 		std::cout << "--\n";
-		IArchive l_iArchive(lc_resultString);
+		IArchive l_iArchive(lc_result);
 		int l_iInt = 0;
 		l_iArchive.deserialize("my_int", l_iInt);
 		std::cout << "Deserialized result:\n";
@@ -48,11 +52,11 @@ void test_archive()
 		std::cout << lc_oPerson << "\n";
 		OArchive l_oArchive;
 		l_oArchive.serialize("my_person", lc_oPerson);
-		std::string const lc_resultString = toString(l_oArchive);
+		auto const lc_result = l_oArchive.data();
 		std::cout << "Result:\n";
-		std::cout << lc_resultString << "\n";
+		std::cout << lc_result << "\n";
 		std::cout << "--\n";
-		IArchive l_iArchive(lc_resultString);
+		IArchive l_iArchive(lc_result);
 		Person l_iPerson;
 		l_iArchive.deserialize("my_person", l_iPerson);
 		std::cout << "Deserialized result:\n";
@@ -64,16 +68,17 @@ void test_archive()
 			Person("FatherName", 40),
 			Person("MotherName", 40),
 			Person("SonName", 10),
-			Person("DaughterName", 10));
+			Person("DaughterName", 10),
+			1.234567890123456);
 		std::cout << "Serializing Family:\n";
 		std::cout << lc_oFamily << "\n";
 		OArchive l_oArchive;
 		l_oArchive.serialize("my_family", lc_oFamily);
-		std::string const lc_resultString = toString(l_oArchive);
+		auto const lc_result = l_oArchive.data();
 		std::cout << "Result:\n";
-		std::cout << lc_resultString << "\n";
+		std::cout << lc_result << "\n";
 		std::cout << "--\n";
-		IArchive l_iArchive(lc_resultString);
+		IArchive l_iArchive(lc_result);
 		Family l_iFamily;
 		l_iArchive.deserialize("my_family", l_iFamily);
 		std::cout << "Deserialized result:\n";
@@ -86,4 +91,5 @@ int main()
 {
 	test_archive<DemoArchive, DemoArchive>();
 	test_archive<XmlOArchive, XmlIArchive>();
+	test_archive<BinaryOArchive, BinaryIArchive>();
 }
